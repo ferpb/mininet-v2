@@ -1,8 +1,0 @@
-
-python3 -m venv env
-pip install -r requirements.txt
-
-csDownload -d data/cityscapes gtFine_trainvaltest.zip
-CITYSCAPES_DATASET=data/cityscapes csCreateTrainIdLabelImgs
-
-python train.py

@@ -1,4 +1,5 @@
 data
+results
 env
 
 .DS_Store
@@ -7,3 +8,5 @@ __pycache__
 *.png
 *.tar
 *.pth
+
+!pretrained/mininet_cityscapes.tar
