@@ -70,12 +70,9 @@ class Conv2dBatchNorm(nn.Module):
 # MiniNet modules
 
 class MiniNetv2Downsample(nn.Module):
-    def __init__(self, in_channels, out_channels, depthwise=True):
+    def __init__(self, in_channels, out_channels):
         super().__init__()
-        if depthwise:
-            self.conv = MultiDilationDepthwiseSeparableConv2d(in_channels, out_channels, 3, stride=2, padding=0, dilation=1)
-        else:
-            self.conv = Conv2dBatchNorm(in_channels, out_channels, 3, stride=2, dilation=1)
+        self.conv = Conv2dBatchNorm(in_channels, out_channels, 3, stride=2, dilation=1)
 
     def forward(self, x):
         output = self.conv(x)
@@ -100,17 +97,6 @@ class MiniNetv2Upsample(nn.Module):
         output = self.conv(x)
         return output
 
-class Interpolate(nn.Module):
-    def __init__(self, size, mode='bilinear'):
-        super().__init__()
-        self.interp = nn.functional.interpolate
-        self.size = size
-        self.mode = mode
-
-    def forward(self, x):
-        x = self.interp(x, size=self.size, mode=self.mode, align_corners=True)
-        return x
-
 # MiniNet-v2 model
 
 class MiniNetv2(nn.Module):
@@ -119,22 +105,24 @@ class MiniNetv2(nn.Module):
 
     Note: Input width and height should be multiples of 8
     """
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, interpolate=True):
         super().__init__()
 
+        self.interpolate = interpolate
+
         # 1. Downsample block
-        self.d1 = MiniNetv2Downsample(in_channels, 16, depthwise=False)
-        self.d2 = MiniNetv2Downsample(16, 64, depthwise=False)
+        self.d1 = MiniNetv2Downsample(in_channels, 16)
+        self.d2 = MiniNetv2Downsample(16, 64)
         self.m_downsample = nn.ModuleList([MiniNetv2Module(64, 64, 1) for i in range(10)])
-        self.d3 = MiniNetv2Downsample(64, 128, depthwise=False)
+        self.d3 = MiniNetv2Downsample(64, 128)
 
         # 2. Feature extractor block
         rates = [1, 2, 1, 4, 1, 8, 1, 16, 1, 1, 1, 2, 1, 4, 1, 8]
         self.m_feature = nn.ModuleList([MiniNetv2Module(128, 128, rate) for rate in rates])
 
         # 3. Refinement block
-        self.d4 = MiniNetv2Downsample(in_channels, 16, depthwise=False)
-        self.d5 = MiniNetv2Downsample(16, 64, depthwise=False)
+        self.d4 = MiniNetv2Downsample(in_channels, 16)
+        self.d5 = MiniNetv2Downsample(16, 64)
 
         # 4. Upsample block
         self.up1 = MiniNetv2Upsample(128, 64)
@@ -163,7 +151,8 @@ class MiniNetv2(nn.Module):
             m_upsample = m(m_upsample) # m26-m29
 
         output = self.output(m_upsample)
-        output = Interpolate(size=x.shape[2:])(output)
-        output = F.softmax(output, dim=1)
+
+        if self.interpolate:
+            output = F.interpolate(output, size=x.shape[2:], mode='bilinear', align_corners=True)
 
         return output
