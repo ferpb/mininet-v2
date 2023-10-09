@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ## Dataset
 
-We provide a script for downloading the Cityscapes dataset using the `cityscapesscripts` package. You will need an account in the [Cityscapes website](https://www.cityscapes-dataset.com/) to access the data.
+We provide a script for downloading the Cityscapes dataset using the [`cityscapesscripts`](https://github.com/mcordts/cityscapesScripts) package. You will need an account in the [Cityscapes website](https://www.cityscapes-dataset.com/) to access the data.
 
 ```
 bash download_datasets.sh
@@ -32,7 +32,7 @@ This script by default will save checkpoints during the training in `results/<da
 
 ## Inference
 
-The `inference.ipynb` notebook contains an example of how to use the model for segmentation tasks. We also include a script to prepare a submission to the [Cityscapes evaluation server](https://www.cityscapes-dataset.com/benchmarks/#scene-labeling-taskttps://www.cityscapes-dataset.com) using the test images:
+The `inference.ipynb` notebook contains an example of how to use the model for segmentation tasks. We also include a script to prepare a submission to the [Cityscapes evaluation server](https://www.cityscapes-dataset.com/benchmarks/) using the test images:
 
 ```
 python prepare_submission.py --model-path results/<date>/checkpoint_<epoch>.tar
