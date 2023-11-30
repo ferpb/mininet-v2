@@ -19,7 +19,7 @@ def main(args):
         transforms.ToImageTensor(),
     ])
 
-    test_data = datasets.Cityscapes(args.dataset_path, split='val', mode='fine', target_type='semantic', transforms=transform)
+    test_data = datasets.Cityscapes(args.dataset_path, split='test', mode='fine', target_type='semantic', transforms=transform)
 
     model = mininet.MiniNetv2(3, 19, interpolate=True)
 

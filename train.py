@@ -39,7 +39,7 @@ def median_frequency_exp(dataloader, num_classes, soft):
 
     zeros = freq == 0
     if zeros.sum() != 0:
-        print("There are some classes not present in the training examples")
+        print("There are some classes not present in the training samples")
 
     result = freq.median() / freq
     result[zeros] = 0 # avoid inf values
@@ -89,10 +89,10 @@ def save_checkpoint(path, epoch, model, train_losses, val_losses):
 
 def main(args):
     train_data = datasets.Cityscapes(args.dataset_path, split='train', mode='fine', use_train_classes=True, target_type='semantic', transforms=transform)
-    train_dataloader = DataLoader(train_data, batch_size=args.batch_size, shuffle=True)
+    train_dataloader = DataLoader(train_data, batch_size=args.batch_size, shuffle=True, num_workers=8)
 
     val_data = datasets.Cityscapes(args.dataset_path, split='val', mode='fine', use_train_classes=True, target_type='semantic', transforms=transform)
-    val_dataloader = DataLoader(val_data, batch_size=args.batch_size, shuffle=True)
+    val_dataloader = DataLoader(val_data, batch_size=args.batch_size, shuffle=False, num_workers=8)
 
     model = mininet.MiniNetv2(3, train_data.num_classes, interpolate=True)
     model = model.to(device=args.device)
@@ -120,7 +120,7 @@ def main(args):
         train_losses.append(train_loss)
         val_losses.append(val_loss)
 
-        print(f'epoch {i:4d}, {train_loss:.4f}, {val_loss:.4f}')
+        print(f'epoch: {i:4d}, train_loss: {train_loss:.4f}, val_loss: {val_loss:.4f}')
 
         if i % 10 == 0:
             save_checkpoint(root / f'checkpoint_{i:03d}.tar', i, model, train_losses, val_losses)
