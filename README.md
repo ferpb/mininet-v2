@@ -4,7 +4,7 @@ This repository contains a PyTorch implementation of MiniNet-v2 for semantic seg
 
 ## Setup
 
-First, you can install the dependiencies using a virtual environment:
+First, you can install the dependencies using a virtual environment:
 
 ```
 python3 -m venv env
@@ -25,7 +25,7 @@ bash download_datasets.sh
 Once the dataset is downloaded, you can train a model with default settings running the training script:
 
 ```
-python train.py
+python train_segmentation.py
 ```
 
 This script by default will save checkpoints during the training in `results/<date>/checkpoint_<epoch>.tar`.
@@ -37,6 +37,11 @@ The `inference.ipynb` notebook contains an example of how to use the model for s
 ```
 python prepare_submission.py --model-path results/<date>/checkpoint_<epoch>.tar
 ```
+
+## References
+
+* https://github.com/Shathe/MiniNet-v2
+* https://github.com/endomapper/EM_Dataset-ToolSegmentation
 
 ## Citation
 
