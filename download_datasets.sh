@@ -1,7 +1,6 @@
 #!/bin/sh
 
 function download_cityscapes {
-    pip install cityscapesscripts
     mkdir -p data/cityscapes
     cd data/cityscapes
     csDownload gtFine_trainvaltest.zip leftImg8bit_trainvaltest.zip

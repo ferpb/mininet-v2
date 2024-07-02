@@ -2,6 +2,7 @@ cityscapesscripts==2.2.2
 matplotlib==3.8.0
 imageio==2.31.5
 pathlib==1.0.1
-torch==2.0.1
-torchvision==0.15.2
+torch==2.2.2
+torchvision==0.17.2
 torchmetrics==1.2.0
+tensorboard==2.15.0

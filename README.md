@@ -4,7 +4,7 @@ This repository contains a PyTorch implementation of MiniNet-v2 for semantic seg
 
 ## Setup
 
-First, you can install the dependencies using a virtual environment:
+First, you can install the dependencies using a virtual environment. This setup has been tested with Python 3.10:
 
 ```
 python3 -m venv env
